@@ -1,0 +1,281 @@
+openapi: 3.0.3
+
+info:
+  title: Delivery Service API
+  description: >
+    API сервиса доставки заказов. Клиент создаёт заказ, оплачивает его,
+    следит за статусом и может отменить.
+  version: 0.1.0
+
+servers:
+  - url: https://api.delivery.example.com/v1
+    description: Тестовый сервер (адрес условный)
+
+tags:
+  - name: Orders
+    description: Заказы клиента
+  - name: Deliveries
+    description: Доставки и работа курьера
+
+paths:
+  /orders:
+    post:
+      tags: [Orders]
+      summary: Создать заказ
+      description: >
+        Создаёт заказ из товаров одного магазина. Заказ создаётся
+        в статусе created. Сумма считается на сервере с учётом промокода (FR-01, FR-02).
+      operationId: createOrder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderCreate'
+            example:
+              store_id: 3
+              address_id: 17
+              promo_code: WELCOME10
+              items:
+                - product_id: 41
+                  quantity: 2
+                - product_id: 45
+                  quantity: 1
+      responses:
+        '201':
+          description: Заказ создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          description: Некорректный запрос (например, товары из разных магазинов или пустой список)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: ITEMS_FROM_DIFFERENT_STORES
+                message: Все товары заказа должны принадлежать одному магазину
+        '404':
+          description: Магазин, адрес или товар не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /orders/{orderId}:
+    get:
+      tags: [Orders]
+      summary: Получить заказ и его статус
+      description: Возвращает заказ с текущим статусом (FR-04).
+      operationId: getOrder
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          description: Идентификатор заказа
+          schema:
+            type: integer
+            example: 1024
+      responses:
+        '200':
+          description: Заказ найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '404':
+          description: Заказ не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: ORDER_NOT_FOUND
+                message: Заказ с таким идентификатором не найден
+
+  /orders/{orderId}/cancel:
+    post:
+      tags: [Orders]
+      summary: Отменить заказ
+      description: >
+        Клиент отменяет заказ до передачи курьеру (FR-03).
+        Если заказ был оплачен, создаётся возврат денег.
+      operationId: cancelOrder
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          description: Идентификатор заказа
+          schema:
+            type: integer
+            example: 1024
+      responses:
+        '200':
+          description: Заказ отменён
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '404':
+          description: Заказ не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: ORDER_NOT_FOUND
+                message: Заказ с таким идентификатором не найден
+        '409':
+          description: "Отмена невозможна: заказ уже передан курьеру"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: CANCEL_NOT_ALLOWED
+                message: Заказ в статусе in_delivery отменить нельзя
+
+  /deliveries/{deliveryId}/complete:
+    post:
+      tags: [Deliveries]
+      summary: Подтвердить вручение заказа
+      description: >
+        Курьер подтверждает, что заказ вручён клиенту (FR-11).
+      operationId: completeDelivery
+      parameters:
+        - name: deliveryId
+          in: path
+          required: true
+          description: Идентификатор доставки
+          schema:
+            type: integer
+            example: 1024
+      responses:
+        '200':
+          description: Вручение подтверждено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '404':
+          description: Доставка не найдена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: DELIVERY_NOT_FOUND
+                message: Доставка с таким идентификатором не найдена
+        '409':
+          description: Нельзя подтвердить вручение
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: DELIVERY_NOT_IN_PROGRESS
+                message: Подтвердить можно только заказ в статусе in_delivery
+
+components:
+  schemas:
+    OrderStatus:
+      type: string
+      description: Статус заказа (совпадает с диаграммой состояний)
+      enum:
+        - created
+        - paid
+        - payment_failed
+        - accepted_by_store
+        - rejected_by_store
+        - ready
+        - assigned_to_courier
+        - in_delivery
+        - delivered
+        - delivery_failed
+        - cancelled
+
+    OrderItemCreate:
+      type: object
+      required: [product_id, quantity]
+      properties:
+        product_id:
+          type: integer
+          example: 41
+        quantity:
+          type: integer
+          minimum: 1
+          maximum: 20
+          example: 2
+
+    OrderCreate:
+      type: object
+      required: [store_id, address_id, items]
+      properties:
+        store_id:
+          type: integer
+          example: 3
+        address_id:
+          type: integer
+          description: Адрес доставки из адресов клиента
+          example: 17
+        promo_code:
+          type: string
+          description: Необязательный промокод
+          example: WELCOME10
+        items:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/OrderItemCreate'
+
+    OrderItem:
+      type: object
+      properties:
+        product_id:
+          type: integer
+        name:
+          type: string
+        quantity:
+          type: integer
+        price_at_order:
+          type: number
+          format: double
+          description: Цена на момент заказа
+
+    Order:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1024
+        status:
+          $ref: '#/components/schemas/OrderStatus'
+        store_id:
+          type: integer
+        address_id:
+          type: integer
+        total_amount:
+          type: number
+          format: double
+          example: 874.50
+        created_at:
+          type: string
+          format: date-time
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+
+    Error:
+      type: object
+      required: [code, message]
+      properties:
+        code:
+          type: string
+          description: Машиночитаемый код ошибки
+          example: ORDER_NOT_FOUND
+        message:
+          type: string
+          description: Описание ошибки для человека
