@@ -1,0 +1,2067 @@
+{
+  "info": {
+    "_postman_id": "d3688f5d-de3c-4e5d-9849-0061502b7b62",
+    "name": "Delivery Service API",
+    "description": "API сервиса доставки заказов. Клиент создаёт заказ, оплачивает его, следит за статусом и может отменить.\n",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "59005845",
+    "_collection_link": "https://go.postman.co/collection/59005845-d3688f5d-de3c-4e5d-9849-0061502b7b62?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "orders",
+      "item": [
+        {
+          "name": "{orderId}",
+          "item": [
+            {
+              "name": "cancel",
+              "item": []
+            },
+            {
+              "name": "payments",
+              "item": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "deliveries",
+      "item": [
+        {
+          "name": "{deliveryId}",
+          "item": [
+            {
+              "name": "complete",
+              "item": [
+                {
+                  "name": "Подтвердить вручение заказа",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/deliveries/:deliveryId/complete",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "deliveries",
+                        ":deliveryId",
+                        "complete"
+                      ],
+                      "variable": [
+                        {
+                          "key": "deliveryId",
+                          "value": "1024",
+                          "description": "Идентификатор доставки"
+                        }
+                      ]
+                    },
+                    "description": "Курьер подтверждает, что заказ вручён клиенту (FR-11).\n"
+                  },
+                  "response": [
+                    {
+                      "name": "Вручение подтверждено",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/deliveries/:deliveryId/complete",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "deliveries",
+                            ":deliveryId",
+                            "complete"
+                          ],
+                          "variable": [
+                            {
+                              "key": "deliveryId",
+                              "value": "1024",
+                              "description": "Идентификатор доставки"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"id\": 1024,\n  \"status\": \"delivered\",\n  \"store_id\": 8478,\n  \"address_id\": 714,\n  \"total_amount\": 874.5,\n  \"created_at\": \"2019-02-22T09:35:19.220Z\",\n  \"items\": [\n    {\n      \"product_id\": 3452,\n      \"name\": \"string\",\n      \"quantity\": 6509,\n      \"price_at_order\": 2732.2422499759623\n    },\n    {\n      \"product_id\": 3091,\n      \"name\": \"string\",\n      \"quantity\": 5405,\n      \"price_at_order\": 3066.3023767001273\n    }\n  ]\n}"
+                    },
+                    {
+                      "name": "Доставка не найдена",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/deliveries/:deliveryId/complete",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "deliveries",
+                            ":deliveryId",
+                            "complete"
+                          ],
+                          "variable": [
+                            {
+                              "key": "deliveryId",
+                              "value": "1024",
+                              "description": "Идентификатор доставки"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"code\": \"DELIVERY_NOT_FOUND\",\n  \"message\": \"Доставка с таким идентификатором не найдена\"\n}"
+                    },
+                    {
+                      "name": "Нельзя подтвердить вручение",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/deliveries/:deliveryId/complete",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "deliveries",
+                            ":deliveryId",
+                            "complete"
+                          ],
+                          "variable": [
+                            {
+                              "key": "deliveryId",
+                              "value": "1024",
+                              "description": "Идентификатор доставки"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Conflict",
+                      "code": 409,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"code\": \"DELIVERY_NOT_IN_PROGRESS\",\n  \"message\": \"Подтвердить можно только заказ в статусе in_delivery\"\n}"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Позитивный сценарий",
+      "item": [
+        {
+          "name": "Создать заказ",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Заказ создан (201)\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\nconst body = pm.response.json();\r\npm.collectionVariables.set(\"orderId\", body.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "x-mock-response-code",
+                "value": "201"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"store_id\": 3,\n  \"address_id\": 17,\n  \"promo_code\": \"WELCOME10\",\n  \"items\": [\n    {\n      \"product_id\": 41,\n      \"quantity\": 2\n    },\n    {\n      \"product_id\": 45,\n      \"quantity\": 1\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orders"
+              ]
+            },
+            "description": "Создаёт заказ из товаров одного магазина. Заказ создаётся в статусе created. Сумма считается на сервере с учётом промокода (FR-01, FR-02).\n"
+          },
+          "response": [
+            {
+              "name": "Заказ создан",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"store_id\": 3,\n  \"address_id\": 17,\n  \"promo_code\": \"WELCOME10\",\n  \"items\": [\n    {\n      \"product_id\": 41,\n      \"quantity\": 2\n    },\n    {\n      \"product_id\": 45,\n      \"quantity\": 1\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/orders",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "orders"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": 1024,\n  \"status\": \"delivered\",\n  \"store_id\": 8478,\n  \"address_id\": 714,\n  \"total_amount\": 874.5,\n  \"created_at\": \"2019-02-22T09:35:19.220Z\",\n  \"items\": [\n    {\n      \"product_id\": 3452,\n      \"name\": \"string\",\n      \"quantity\": 6509,\n      \"price_at_order\": 2732.2422499759623\n    },\n    {\n      \"product_id\": 3091,\n      \"name\": \"string\",\n      \"quantity\": 5405,\n      \"price_at_order\": 3066.3023767001273\n    }\n  ]\n}"
+            },
+            {
+              "name": "Некорректный запрос (например, товары из разных магазинов или пустой список)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"store_id\": 3,\n  \"address_id\": 17,\n  \"promo_code\": \"WELCOME10\",\n  \"items\": [\n    {\n      \"product_id\": 41,\n      \"quantity\": 2\n    },\n    {\n      \"product_id\": 45,\n      \"quantity\": 1\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/orders",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "orders"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"code\": \"ITEMS_FROM_DIFFERENT_STORES\",\n  \"message\": \"Все товары заказа должны принадлежать одному магазину\"\n}"
+            },
+            {
+              "name": "Магазин, адрес или товар не найден",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"store_id\": 3,\n  \"address_id\": 17,\n  \"promo_code\": \"WELCOME10\",\n  \"items\": [\n    {\n      \"product_id\": 41,\n      \"quantity\": 2\n    },\n    {\n      \"product_id\": 45,\n      \"quantity\": 1\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/orders",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "orders"
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"code\": \"ORDER_NOT_FOUND\",\n  \"message\": \"string\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Оплатить заказ",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Код ответа 201\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\npm.test(\"В платеже есть нужные поля\", function () {\r\n    const body = pm.response.json();\r\n    [\"id\", \"order_id\", \"method\", \"status\", \"amount\"].forEach(function (field) {\r\n        pm.expect(body).to.have.property(field);\r\n    });\r\n});\r\n\r\npm.test(\"Способ оплаты и статус из допустимых значений\", function () {\r\n    const body = pm.response.json();\r\n    pm.expect([\"card\", \"sbp\"]).to.include(body.method);\r\n    pm.expect([\"pending\", \"success\", \"failed\", \"refunded\"]).to.include(body.status);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Idempotency-Key",
+                "value": "b7c1f1d0-5c1e-4f6a-9a53-2f4a0f3d9e11",
+                "description": "Уникальный ключ запроса, который генерирует клиент (например, UUID). Один и тот же ключ означает одну и ту же попытку оплаты.\n"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "x-mock-response-code",
+                "value": "201"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"method\": \"card\",\n  \"payment_token\": \"tok_8f3a2c91d4\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orders/:orderId/payments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orders",
+                ":orderId",
+                "payments"
+              ],
+              "variable": [
+                {
+                  "key": "orderId",
+                  "value": "{{orderId}}",
+                  "description": "Идентификатор заказа"
+                }
+              ]
+            },
+            "description": "Создаёт платёж по заказу через внешний платёжный шлюз (FR-05).\nОплатить можно заказ в статусе created или payment_failed.\nЧисло попыток оплаты не ограничено (после отказа можно повторить).\n\nЗащита от двойного списания (FR-07): клиент передаёт уникальный\nзаголовок Idempotency-Key. Если сервер уже обработал запрос с таким\nключом, он возвращает тот же ответ, что и в первый раз, а повторного\nсписания не происходит. В этом случае в ответе приходит заголовок\nIdempotency-Replayed со значением true.\n\nПри успешной оплате статус заказа меняется на paid, при отказе\nна payment_failed.\n"
+          },
+          "response": [
+            {
+              "name": "Платёж создан и подтверждён банком",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "description": "Уникальный ключ запроса, который генерирует клиент (например, UUID). Один и тот же ключ означает одну и ту же попытку оплаты.\n",
+                    "key": "Idempotency-Key",
+                    "value": "b7c1f1d0-5c1e-4f6a-9a53-2f4a0f3d9e11"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"method\": \"card\",\n  \"payment_token\": \"tok_8f3a2c91d4\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/orders/:orderId/payments",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "orders",
+                    ":orderId",
+                    "payments"
+                  ],
+                  "variable": [
+                    {
+                      "key": "orderId",
+                      "value": "1024",
+                      "description": "Идентификатор заказа"
+                    }
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "disabled": false,
+                  "description": {
+                    "content": "Равен true, если это повторный ответ на запрос с тем же ключом",
+                    "type": "text/plain"
+                  },
+                  "key": "Idempotency-Replayed",
+                  "value": "true"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": 5021,\n  \"order_id\": 1024,\n  \"method\": \"card\",\n  \"status\": \"success\",\n  \"amount\": 874.5,\n  \"external_id\": \"pay_1024_5021\",\n  \"paid_at\": \"1994-04-29T21:32:43.332Z\"\n}"
+            },
+            {
+              "name": "Некорректный запрос (нет заголовка Idempotency-Key, неизвестный способ оплаты, не передан токен карты)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "description": "Уникальный ключ запроса, который генерирует клиент (например, UUID). Один и тот же ключ означает одну и ту же попытку оплаты.\n",
+                    "key": "Idempotency-Key",
+                    "value": "b7c1f1d0-5c1e-4f6a-9a53-2f4a0f3d9e11"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"method\": \"card\",\n  \"payment_token\": \"tok_8f3a2c91d4\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/orders/:orderId/payments",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "orders",
+                    ":orderId",
+                    "payments"
+                  ],
+                  "variable": [
+                    {
+                      "key": "orderId",
+                      "value": "1024",
+                      "description": "Идентификатор заказа"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"code\": \"MISSING_IDEMPOTENCY_KEY\",\n  \"message\": \"Укажите заголовок Idempotency-Key\"\n}"
+            },
+            {
+              "name": "Платёж отклонён банком или платёжным шлюзом",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "description": "Уникальный ключ запроса, который генерирует клиент (например, UUID). Один и тот же ключ означает одну и ту же попытку оплаты.\n",
+                    "key": "Idempotency-Key",
+                    "value": "b7c1f1d0-5c1e-4f6a-9a53-2f4a0f3d9e11"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"method\": \"card\",\n  \"payment_token\": \"tok_8f3a2c91d4\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/orders/:orderId/payments",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "orders",
+                    ":orderId",
+                    "payments"
+                  ],
+                  "variable": [
+                    {
+                      "key": "orderId",
+                      "value": "1024",
+                      "description": "Идентификатор заказа"
+                    }
+                  ]
+                }
+              },
+              "status": "Payment Required",
+              "code": 402,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"code\": \"PAYMENT_DECLINED\",\n  \"message\": \"Платёж отклонён. Попробуйте другую карту или способ оплаты\"\n}"
+            },
+            {
+              "name": "Заказ не найден",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "description": "Уникальный ключ запроса, который генерирует клиент (например, UUID). Один и тот же ключ означает одну и ту же попытку оплаты.\n",
+                    "key": "Idempotency-Key",
+                    "value": "b7c1f1d0-5c1e-4f6a-9a53-2f4a0f3d9e11"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"method\": \"card\",\n  \"payment_token\": \"tok_8f3a2c91d4\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/orders/:orderId/payments",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "orders",
+                    ":orderId",
+                    "payments"
+                  ],
+                  "variable": [
+                    {
+                      "key": "orderId",
+                      "value": "1024",
+                      "description": "Идентификатор заказа"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"code\": \"ORDER_NOT_FOUND\",\n  \"message\": \"Заказ с таким идентификатором не найден\"\n}"
+            },
+            {
+              "name": "Заказ нельзя оплатить в текущем статусе (например, он уже оплачен или отменён)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "description": "Уникальный ключ запроса, который генерирует клиент (например, UUID). Один и тот же ключ означает одну и ту же попытку оплаты.\n",
+                    "key": "Idempotency-Key",
+                    "value": "b7c1f1d0-5c1e-4f6a-9a53-2f4a0f3d9e11"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"method\": \"card\",\n  \"payment_token\": \"tok_8f3a2c91d4\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/orders/:orderId/payments",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "orders",
+                    ":orderId",
+                    "payments"
+                  ],
+                  "variable": [
+                    {
+                      "key": "orderId",
+                      "value": "1024",
+                      "description": "Идентификатор заказа"
+                    }
+                  ]
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"code\": \"ORDER_NOT_PAYABLE\",\n  \"message\": \"Заказ в статусе paid оплатить повторно нельзя\"\n}"
+            },
+            {
+              "name": "Платёжный шлюз не ответил вовремя, результат платежа неизвестен",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "description": "Уникальный ключ запроса, который генерирует клиент (например, UUID). Один и тот же ключ означает одну и ту же попытку оплаты.\n",
+                    "key": "Idempotency-Key",
+                    "value": "b7c1f1d0-5c1e-4f6a-9a53-2f4a0f3d9e11"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"method\": \"card\",\n  \"payment_token\": \"tok_8f3a2c91d4\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/orders/:orderId/payments",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "orders",
+                    ":orderId",
+                    "payments"
+                  ],
+                  "variable": [
+                    {
+                      "key": "orderId",
+                      "value": "1024",
+                      "description": "Идентификатор заказа"
+                    }
+                  ]
+                }
+              },
+              "status": "Gateway Timeout",
+              "code": 504,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"code\": \"GATEWAY_TIMEOUT\",\n  \"message\": \"Платёжный шлюз не отвечает. Повторите запрос с тем же Idempotency-Key\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Получить заказ и его статус",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Код ответа 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"В ответе есть id и status\", function () {\r\n    const body = pm.response.json();\r\n    pm.expect(body).to.have.property(\"id\");\r\n    pm.expect(body).to.have.property(\"status\");\r\n});\r\n\r\npm.test(\"Статус заказа из допустимого списка\", function () {\r\n    const body = pm.response.json();\r\n    const allowed = [\"created\", \"paid\", \"payment_failed\", \"accepted_by_store\",\r\n        \"rejected_by_store\", \"ready\", \"assigned_to_courier\", \"in_delivery\",\r\n        \"delivered\", \"delivery_failed\", \"cancelled\"];\r\n    pm.expect(allowed).to.include(body.status);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "x-mock-response-code",
+                "value": "200"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/orders/:orderId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orders",
+                ":orderId"
+              ],
+              "variable": [
+                {
+                  "key": "orderId",
+                  "value": "{{orderId}}",
+                  "description": "Идентификатор заказа"
+                }
+              ]
+            },
+            "description": "Возвращает заказ с текущим статусом (FR-04)."
+          },
+          "response": [
+            {
+              "name": "Заказ найден",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/orders/:orderId",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "orders",
+                    ":orderId"
+                  ],
+                  "variable": [
+                    {
+                      "key": "orderId",
+                      "value": "1024",
+                      "description": "Идентификатор заказа"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": 1024,\n  \"status\": \"delivered\",\n  \"store_id\": 8478,\n  \"address_id\": 714,\n  \"total_amount\": 874.5,\n  \"created_at\": \"2019-02-22T09:35:19.220Z\",\n  \"items\": [\n    {\n      \"product_id\": 3452,\n      \"name\": \"string\",\n      \"quantity\": 6509,\n      \"price_at_order\": 2732.2422499759623\n    },\n    {\n      \"product_id\": 3091,\n      \"name\": \"string\",\n      \"quantity\": 5405,\n      \"price_at_order\": 3066.3023767001273\n    }\n  ]\n}"
+            },
+            {
+              "name": "Заказ не найден",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/orders/:orderId",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "orders",
+                    ":orderId"
+                  ],
+                  "variable": [
+                    {
+                      "key": "orderId",
+                      "value": "1024",
+                      "description": "Идентификатор заказа"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"code\": \"ORDER_NOT_FOUND\",\n  \"message\": \"Заказ с таким идентификатором не найден\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Отменить заказ",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Код ответа 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"В ответе есть id и status\", function () {\r\n    const body = pm.response.json();\r\n    pm.expect(body).to.have.property(\"id\");\r\n    pm.expect(body).to.have.property(\"status\");\r\n});\r\n\r\npm.test(\"Статус заказа из допустимого списка\", function () {\r\n    const allowed = [\"created\", \"paid\", \"payment_failed\", \"accepted_by_store\",\r\n        \"rejected_by_store\", \"ready\", \"assigned_to_courier\", \"in_delivery\",\r\n        \"delivered\", \"delivery_failed\", \"cancelled\"];\r\n    pm.expect(allowed).to.include(pm.response.json().status);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "x-mock-response-code",
+                "value": "200"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/orders/:orderId/cancel",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orders",
+                ":orderId",
+                "cancel"
+              ],
+              "variable": [
+                {
+                  "key": "orderId",
+                  "value": "{{orderId}}",
+                  "description": "Идентификатор заказа"
+                }
+              ]
+            },
+            "description": "Клиент отменяет заказ до передачи курьеру (FR-03). Если заказ был оплачен, создаётся возврат денег.\n"
+          },
+          "response": [
+            {
+              "name": "Заказ отменён",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/orders/:orderId/cancel",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "orders",
+                    ":orderId",
+                    "cancel"
+                  ],
+                  "variable": [
+                    {
+                      "key": "orderId",
+                      "value": "1024",
+                      "description": "Идентификатор заказа"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": 1024,\n  \"status\": \"delivered\",\n  \"store_id\": 8478,\n  \"address_id\": 714,\n  \"total_amount\": 874.5,\n  \"created_at\": \"2019-02-22T09:35:19.220Z\",\n  \"items\": [\n    {\n      \"product_id\": 3452,\n      \"name\": \"string\",\n      \"quantity\": 6509,\n      \"price_at_order\": 2732.2422499759623\n    },\n    {\n      \"product_id\": 3091,\n      \"name\": \"string\",\n      \"quantity\": 5405,\n      \"price_at_order\": 3066.3023767001273\n    }\n  ]\n}"
+            },
+            {
+              "name": "Заказ не найден",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/orders/:orderId/cancel",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "orders",
+                    ":orderId",
+                    "cancel"
+                  ],
+                  "variable": [
+                    {
+                      "key": "orderId",
+                      "value": "1024",
+                      "description": "Идентификатор заказа"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"code\": \"ORDER_NOT_FOUND\",\n  \"message\": \"Заказ с таким идентификатором не найден\"\n}"
+            },
+            {
+              "name": "Отмена невозможна: заказ уже передан курьеру",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/orders/:orderId/cancel",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "orders",
+                    ":orderId",
+                    "cancel"
+                  ],
+                  "variable": [
+                    {
+                      "key": "orderId",
+                      "value": "1024",
+                      "description": "Идентификатор заказа"
+                    }
+                  ]
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"code\": \"CANCEL_NOT_ALLOWED\",\n  \"message\": \"Заказ в статусе in_delivery отменить нельзя\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Негативные кейсы",
+      "item": [
+        {
+          "name": "Создать заказ: Ошибка 400",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Код ответа 400\", function () {\r\n    pm.response.to.have.status(400);\r\n});\r\n\r\npm.test(\"Ошибка содержит code и message\", function () {\r\n    const body = pm.response.json();\r\n    pm.expect(body).to.have.property(\"code\");\r\n    pm.expect(body).to.have.property(\"message\");\r\n});\r\n\r\npm.test(\"Код ошибки ITEMS_FROM_DIFFERENT_STORES\", function () {\r\n    pm.expect(pm.response.json().code).to.eql(\"ITEMS_FROM_DIFFERENT_STORES\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "x-mock-response-code",
+                "value": "400"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"store_id\": 3,\n  \"address_id\": 17,\n  \"promo_code\": \"WELCOME10\",\n  \"items\": [\n    {\n      \"product_id\": 41,\n      \"quantity\": 2\n    },\n    {\n      \"product_id\": 45,\n      \"quantity\": 1\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orders"
+              ]
+            },
+            "description": "Создаёт заказ из товаров одного магазина. Заказ создаётся в статусе created. Сумма считается на сервере с учётом промокода (FR-01, FR-02).\n"
+          },
+          "response": [
+            {
+              "name": "Заказ создан",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"store_id\": 3,\n  \"address_id\": 17,\n  \"promo_code\": \"WELCOME10\",\n  \"items\": [\n    {\n      \"product_id\": 41,\n      \"quantity\": 2\n    },\n    {\n      \"product_id\": 45,\n      \"quantity\": 1\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/orders",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "orders"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": 1024,\n  \"status\": \"delivered\",\n  \"store_id\": 8478,\n  \"address_id\": 714,\n  \"total_amount\": 874.5,\n  \"created_at\": \"2019-02-22T09:35:19.220Z\",\n  \"items\": [\n    {\n      \"product_id\": 3452,\n      \"name\": \"string\",\n      \"quantity\": 6509,\n      \"price_at_order\": 2732.2422499759623\n    },\n    {\n      \"product_id\": 3091,\n      \"name\": \"string\",\n      \"quantity\": 5405,\n      \"price_at_order\": 3066.3023767001273\n    }\n  ]\n}"
+            },
+            {
+              "name": "Некорректный запрос (например, товары из разных магазинов или пустой список)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"store_id\": 3,\n  \"address_id\": 17,\n  \"promo_code\": \"WELCOME10\",\n  \"items\": [\n    {\n      \"product_id\": 41,\n      \"quantity\": 2\n    },\n    {\n      \"product_id\": 45,\n      \"quantity\": 1\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/orders",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "orders"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"code\": \"ITEMS_FROM_DIFFERENT_STORES\",\n  \"message\": \"Все товары заказа должны принадлежать одному магазину\"\n}"
+            },
+            {
+              "name": "Магазин, адрес или товар не найден",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"store_id\": 3,\n  \"address_id\": 17,\n  \"promo_code\": \"WELCOME10\",\n  \"items\": [\n    {\n      \"product_id\": 41,\n      \"quantity\": 2\n    },\n    {\n      \"product_id\": 45,\n      \"quantity\": 1\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/orders",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "orders"
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"code\": \"ORDER_NOT_FOUND\",\n  \"message\": \"string\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Оплатить заказ: Ошибка 402",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Код ответа 402\", function () {\r\n    pm.response.to.have.status(402);\r\n});\r\n\r\npm.test(\"Ошибка содержит code и message\", function () {\r\n    const body = pm.response.json();\r\n    pm.expect(body).to.have.property(\"code\");\r\n    pm.expect(body).to.have.property(\"message\");\r\n});\r\n\r\npm.test(\"Код ошибки PAYMENT_DECLINED\", function () {\r\n    pm.expect(pm.response.json().code).to.eql(\"PAYMENT_DECLINED\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Idempotency-Key",
+                "value": "b7c1f1d0-5c1e-4f6a-9a53-2f4a0f3d9e11",
+                "description": "Уникальный ключ запроса, который генерирует клиент (например, UUID). Один и тот же ключ означает одну и ту же попытку оплаты.\n"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "x-mock-response-code",
+                "value": "402"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"method\": \"card\",\n  \"payment_token\": \"tok_8f3a2c91d4\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orders/:orderId/payments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orders",
+                ":orderId",
+                "payments"
+              ],
+              "variable": [
+                {
+                  "key": "orderId",
+                  "value": "1024",
+                  "description": "Идентификатор заказа"
+                }
+              ]
+            },
+            "description": "Создаёт платёж по заказу через внешний платёжный шлюз (FR-05).\nОплатить можно заказ в статусе created или payment_failed.\nЧисло попыток оплаты не ограничено (после отказа можно повторить).\n\nЗащита от двойного списания (FR-07): клиент передаёт уникальный\nзаголовок Idempotency-Key. Если сервер уже обработал запрос с таким\nключом, он возвращает тот же ответ, что и в первый раз, а повторного\nсписания не происходит. В этом случае в ответе приходит заголовок\nIdempotency-Replayed со значением true.\n\nПри успешной оплате статус заказа меняется на paid, при отказе\nна payment_failed.\n"
+          },
+          "response": [
+            {
+              "name": "Платёж создан и подтверждён банком",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "description": "Уникальный ключ запроса, который генерирует клиент (например, UUID). Один и тот же ключ означает одну и ту же попытку оплаты.\n",
+                    "key": "Idempotency-Key",
+                    "value": "b7c1f1d0-5c1e-4f6a-9a53-2f4a0f3d9e11"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"method\": \"card\",\n  \"payment_token\": \"tok_8f3a2c91d4\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/orders/:orderId/payments",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "orders",
+                    ":orderId",
+                    "payments"
+                  ],
+                  "variable": [
+                    {
+                      "key": "orderId",
+                      "value": "1024",
+                      "description": "Идентификатор заказа"
+                    }
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "disabled": false,
+                  "description": {
+                    "content": "Равен true, если это повторный ответ на запрос с тем же ключом",
+                    "type": "text/plain"
+                  },
+                  "key": "Idempotency-Replayed",
+                  "value": "true"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": 5021,\n  \"order_id\": 1024,\n  \"method\": \"card\",\n  \"status\": \"success\",\n  \"amount\": 874.5,\n  \"external_id\": \"pay_1024_5021\",\n  \"paid_at\": \"1994-04-29T21:32:43.332Z\"\n}"
+            },
+            {
+              "name": "Некорректный запрос (нет заголовка Idempotency-Key, неизвестный способ оплаты, не передан токен карты)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "description": "Уникальный ключ запроса, который генерирует клиент (например, UUID). Один и тот же ключ означает одну и ту же попытку оплаты.\n",
+                    "key": "Idempotency-Key",
+                    "value": "b7c1f1d0-5c1e-4f6a-9a53-2f4a0f3d9e11"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"method\": \"card\",\n  \"payment_token\": \"tok_8f3a2c91d4\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/orders/:orderId/payments",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "orders",
+                    ":orderId",
+                    "payments"
+                  ],
+                  "variable": [
+                    {
+                      "key": "orderId",
+                      "value": "1024",
+                      "description": "Идентификатор заказа"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"code\": \"MISSING_IDEMPOTENCY_KEY\",\n  \"message\": \"Укажите заголовок Idempotency-Key\"\n}"
+            },
+            {
+              "name": "Платёж отклонён банком или платёжным шлюзом",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "description": "Уникальный ключ запроса, который генерирует клиент (например, UUID). Один и тот же ключ означает одну и ту же попытку оплаты.\n",
+                    "key": "Idempotency-Key",
+                    "value": "b7c1f1d0-5c1e-4f6a-9a53-2f4a0f3d9e11"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"method\": \"card\",\n  \"payment_token\": \"tok_8f3a2c91d4\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/orders/:orderId/payments",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "orders",
+                    ":orderId",
+                    "payments"
+                  ],
+                  "variable": [
+                    {
+                      "key": "orderId",
+                      "value": "1024",
+                      "description": "Идентификатор заказа"
+                    }
+                  ]
+                }
+              },
+              "status": "Payment Required",
+              "code": 402,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"code\": \"PAYMENT_DECLINED\",\n  \"message\": \"Платёж отклонён. Попробуйте другую карту или способ оплаты\"\n}"
+            },
+            {
+              "name": "Заказ не найден",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "description": "Уникальный ключ запроса, который генерирует клиент (например, UUID). Один и тот же ключ означает одну и ту же попытку оплаты.\n",
+                    "key": "Idempotency-Key",
+                    "value": "b7c1f1d0-5c1e-4f6a-9a53-2f4a0f3d9e11"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"method\": \"card\",\n  \"payment_token\": \"tok_8f3a2c91d4\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/orders/:orderId/payments",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "orders",
+                    ":orderId",
+                    "payments"
+                  ],
+                  "variable": [
+                    {
+                      "key": "orderId",
+                      "value": "1024",
+                      "description": "Идентификатор заказа"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"code\": \"ORDER_NOT_FOUND\",\n  \"message\": \"Заказ с таким идентификатором не найден\"\n}"
+            },
+            {
+              "name": "Заказ нельзя оплатить в текущем статусе (например, он уже оплачен или отменён)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "description": "Уникальный ключ запроса, который генерирует клиент (например, UUID). Один и тот же ключ означает одну и ту же попытку оплаты.\n",
+                    "key": "Idempotency-Key",
+                    "value": "b7c1f1d0-5c1e-4f6a-9a53-2f4a0f3d9e11"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"method\": \"card\",\n  \"payment_token\": \"tok_8f3a2c91d4\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/orders/:orderId/payments",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "orders",
+                    ":orderId",
+                    "payments"
+                  ],
+                  "variable": [
+                    {
+                      "key": "orderId",
+                      "value": "1024",
+                      "description": "Идентификатор заказа"
+                    }
+                  ]
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"code\": \"ORDER_NOT_PAYABLE\",\n  \"message\": \"Заказ в статусе paid оплатить повторно нельзя\"\n}"
+            },
+            {
+              "name": "Платёжный шлюз не ответил вовремя, результат платежа неизвестен",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "description": "Уникальный ключ запроса, который генерирует клиент (например, UUID). Один и тот же ключ означает одну и ту же попытку оплаты.\n",
+                    "key": "Idempotency-Key",
+                    "value": "b7c1f1d0-5c1e-4f6a-9a53-2f4a0f3d9e11"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"method\": \"card\",\n  \"payment_token\": \"tok_8f3a2c91d4\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/orders/:orderId/payments",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "orders",
+                    ":orderId",
+                    "payments"
+                  ],
+                  "variable": [
+                    {
+                      "key": "orderId",
+                      "value": "1024",
+                      "description": "Идентификатор заказа"
+                    }
+                  ]
+                }
+              },
+              "status": "Gateway Timeout",
+              "code": 504,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"code\": \"GATEWAY_TIMEOUT\",\n  \"message\": \"Платёжный шлюз не отвечает. Повторите запрос с тем же Idempotency-Key\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Получить заказ: 404 не найден",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Код ответа 404\", function () {\r\n    pm.response.to.have.status(404);\r\n});\r\n\r\npm.test(\"Ошибка содержит code и message\", function () {\r\n    const body = pm.response.json();\r\n    pm.expect(body).to.have.property(\"code\");\r\n    pm.expect(body).to.have.property(\"message\");\r\n});\r\n\r\npm.test(\"Код ошибки ORDER_NOT_FOUND\", function () {\r\n    pm.expect(pm.response.json().code).to.eql(\"ORDER_NOT_FOUND\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "x-mock-response-code",
+                "value": "404"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/orders/:orderId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orders",
+                ":orderId"
+              ],
+              "variable": [
+                {
+                  "key": "orderId",
+                  "value": "1024",
+                  "description": "Идентификатор заказа"
+                }
+              ]
+            },
+            "description": "Возвращает заказ с текущим статусом (FR-04)."
+          },
+          "response": [
+            {
+              "name": "Заказ найден",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/orders/:orderId",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "orders",
+                    ":orderId"
+                  ],
+                  "variable": [
+                    {
+                      "key": "orderId",
+                      "value": "1024",
+                      "description": "Идентификатор заказа"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": 1024,\n  \"status\": \"delivered\",\n  \"store_id\": 8478,\n  \"address_id\": 714,\n  \"total_amount\": 874.5,\n  \"created_at\": \"2019-02-22T09:35:19.220Z\",\n  \"items\": [\n    {\n      \"product_id\": 3452,\n      \"name\": \"string\",\n      \"quantity\": 6509,\n      \"price_at_order\": 2732.2422499759623\n    },\n    {\n      \"product_id\": 3091,\n      \"name\": \"string\",\n      \"quantity\": 5405,\n      \"price_at_order\": 3066.3023767001273\n    }\n  ]\n}"
+            },
+            {
+              "name": "Заказ не найден",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/orders/:orderId",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "orders",
+                    ":orderId"
+                  ],
+                  "variable": [
+                    {
+                      "key": "orderId",
+                      "value": "1024",
+                      "description": "Идентификатор заказа"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"code\": \"ORDER_NOT_FOUND\",\n  \"message\": \"Заказ с таким идентификатором не найден\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Отменить заказ: Ошибка 409",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Код ответа 409\", function () {\r\n    pm.response.to.have.status(409);\r\n});\r\n\r\npm.test(\"Ошибка содержит code и message\", function () {\r\n    const body = pm.response.json();\r\n    pm.expect(body).to.have.property(\"code\");\r\n    pm.expect(body).to.have.property(\"message\");\r\n});\r\n\r\npm.test(\"Код ошибки CANCEL_NOT_ALLOWED\", function () {\r\n    pm.expect(pm.response.json().code).to.eql(\"CANCEL_NOT_ALLOWED\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "x-mock-response-code",
+                "value": "409"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/orders/:orderId/cancel",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orders",
+                ":orderId",
+                "cancel"
+              ],
+              "variable": [
+                {
+                  "key": "orderId",
+                  "value": "1024",
+                  "description": "Идентификатор заказа"
+                }
+              ]
+            },
+            "description": "Клиент отменяет заказ до передачи курьеру (FR-03). Если заказ был оплачен, создаётся возврат денег.\n"
+          },
+          "response": [
+            {
+              "name": "Заказ отменён",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/orders/:orderId/cancel",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "orders",
+                    ":orderId",
+                    "cancel"
+                  ],
+                  "variable": [
+                    {
+                      "key": "orderId",
+                      "value": "1024",
+                      "description": "Идентификатор заказа"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"id\": 1024,\n  \"status\": \"delivered\",\n  \"store_id\": 8478,\n  \"address_id\": 714,\n  \"total_amount\": 874.5,\n  \"created_at\": \"2019-02-22T09:35:19.220Z\",\n  \"items\": [\n    {\n      \"product_id\": 3452,\n      \"name\": \"string\",\n      \"quantity\": 6509,\n      \"price_at_order\": 2732.2422499759623\n    },\n    {\n      \"product_id\": 3091,\n      \"name\": \"string\",\n      \"quantity\": 5405,\n      \"price_at_order\": 3066.3023767001273\n    }\n  ]\n}"
+            },
+            {
+              "name": "Заказ не найден",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/orders/:orderId/cancel",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "orders",
+                    ":orderId",
+                    "cancel"
+                  ],
+                  "variable": [
+                    {
+                      "key": "orderId",
+                      "value": "1024",
+                      "description": "Идентификатор заказа"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"code\": \"ORDER_NOT_FOUND\",\n  \"message\": \"Заказ с таким идентификатором не найден\"\n}"
+            },
+            {
+              "name": "Отмена невозможна: заказ уже передан курьеру",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/orders/:orderId/cancel",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "orders",
+                    ":orderId",
+                    "cancel"
+                  ],
+                  "variable": [
+                    {
+                      "key": "orderId",
+                      "value": "1024",
+                      "description": "Идентификатор заказа"
+                    }
+                  ]
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"code\": \"CANCEL_NOT_ALLOWED\",\n  \"message\": \"Заказ в статусе in_delivery отменить нельзя\"\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://e7fb0c4c-d58f-42a6-8edb-c1fc9ee84ea6.mock.pstmn.io"
+    },
+    {
+      "key": "orderId",
+      "value": ""
+    }
+  ]
+}

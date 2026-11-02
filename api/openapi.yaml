@@ -16,6 +16,8 @@ tags:
     description: Заказы клиента
   - name: Deliveries
     description: Доставки и работа курьера
+  - name: Payments
+    description: Оплата заказов
 
 paths:
   /orders:
@@ -136,6 +138,116 @@ paths:
               example:
                 code: CANCEL_NOT_ALLOWED
                 message: Заказ в статусе in_delivery отменить нельзя
+
+  /orders/{orderId}/payments:
+    post:
+      tags: [Payments]
+      summary: Оплатить заказ
+      description: |
+        Создаёт платёж по заказу через внешний платёжный шлюз (FR-05).
+        Оплатить можно заказ в статусе created или payment_failed.
+        Число попыток оплаты не ограничено (после отказа можно повторить).
+
+        Защита от двойного списания (FR-07): клиент передаёт уникальный
+        заголовок Idempotency-Key. Если сервер уже обработал запрос с таким
+        ключом, он возвращает тот же ответ, что и в первый раз, а повторного
+        списания не происходит. В этом случае в ответе приходит заголовок
+        Idempotency-Replayed со значением true.
+
+        При успешной оплате статус заказа меняется на paid, при отказе
+        на payment_failed.
+      operationId: createPayment
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          description: Идентификатор заказа
+          schema:
+            type: integer
+            example: 1024
+        - name: Idempotency-Key
+          in: header
+          required: true
+          description: >
+            Уникальный ключ запроса, который генерирует клиент (например, UUID).
+            Один и тот же ключ означает одну и ту же попытку оплаты.
+          schema:
+            type: string
+            maxLength: 64
+            example: b7c1f1d0-5c1e-4f6a-9a53-2f4a0f3d9e11
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentCreate'
+            examples:
+              card:
+                summary: Оплата картой
+                value:
+                  method: card
+                  payment_token: tok_8f3a2c91d4
+              sbp:
+                summary: Оплата через СБП
+                value:
+                  method: sbp
+      responses:
+        '201':
+          description: Платёж создан и подтверждён банком
+          headers:
+            Idempotency-Replayed:
+              description: Равен true, если это повторный ответ на запрос с тем же ключом
+              schema:
+                type: boolean
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+        '400':
+          description: Некорректный запрос (нет заголовка Idempotency-Key, неизвестный способ оплаты, не передан токен карты)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: MISSING_IDEMPOTENCY_KEY
+                message: Укажите заголовок Idempotency-Key
+        '402':
+          description: Платёж отклонён банком или платёжным шлюзом
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: PAYMENT_DECLINED
+                message: Платёж отклонён. Попробуйте другую карту или способ оплаты
+        '404':
+          description: Заказ не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: ORDER_NOT_FOUND
+                message: Заказ с таким идентификатором не найден
+        '409':
+          description: Заказ нельзя оплатить в текущем статусе (например, он уже оплачен или отменён)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: ORDER_NOT_PAYABLE
+                message: Заказ в статусе paid оплатить повторно нельзя
+        '504':
+          description: Платёжный шлюз не ответил вовремя, результат платежа неизвестен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: GATEWAY_TIMEOUT
+                message: Платёжный шлюз не отвечает. Повторите запрос с тем же Idempotency-Key
 
   /deliveries/{deliveryId}/complete:
     post:
@@ -267,6 +379,52 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/OrderItem'
+
+    PaymentCreate:
+      type: object
+      required: [method]
+      properties:
+        method:
+          type: string
+          description: Способ оплаты
+          enum: [card, sbp]
+          example: card
+        payment_token:
+          type: string
+          description: >
+            Токен карты, полученный от платёжного шлюза. Обязателен для способа card.
+            Номер карты в наш API не передаётся и не хранится.
+          example: tok_8f3a2c91d4
+
+    Payment:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 5021
+        order_id:
+          type: integer
+          example: 1024
+        method:
+          type: string
+          enum: [card, sbp]
+          example: card
+        status:
+          type: string
+          enum: [pending, success, failed, refunded]
+          example: success
+        amount:
+          type: number
+          format: double
+          example: 874.50
+        external_id:
+          type: string
+          description: Идентификатор платежа в платёжном шлюзе
+          example: pay_1024_5021
+        paid_at:
+          type: string
+          format: date-time
+          description: Время подтверждения оплаты (пусто, пока платёж не подтверждён)
 
     Error:
       type: object
